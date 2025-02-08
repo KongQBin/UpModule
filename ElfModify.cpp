@@ -1,12 +1,12 @@
 #include "ElfModify.h"
-ElfModify::ElfModify(string path) :
-    m_einfo(path,true)
+ElfModify::ElfModify(string mod) :
+    m_einfo(mod,true)
 {
 
 }
 
-ElfModify::ElfModify(string file1, string file2) :
-    m_kinfo(file1), m_einfo(file2,true)
+ElfModify::ElfModify(string symver, string mod) :
+    m_kinfo(symver), m_einfo(mod,true)
 {
 
 }
@@ -18,18 +18,16 @@ ElfModify::~ElfModify()
 
 bool ElfModify::motify()
 {
-//    string sym = "find_symbol";
-//    auto tmp = m_minfo.findSym(sym);
-//    printf("sym %-32s is %s found\n",sym.c_str(),tmp ? "" : "not");
-//    return true;
+    bool ret = true;
+    // 修改符号CRC
     map<string, modversion_info *> *vinfo = m_einfo.getVInfo();
     for(auto it = vinfo->begin(); it != vinfo->end(); ++it)
     {
-//        unsigned long crc =  m_minfo.findSym(it->first);
         unsigned long crc =  m_kinfo.findSym(it->first);
         if(!crc)
         {
             printf("Symbol: %-32s is not found\n",it->first.c_str());
+            ret = false;
         }
         else
         {
@@ -44,15 +42,27 @@ bool ElfModify::motify()
             }
         }
     }
+    // 修改版本魔术
     list<char *>* modinfo = m_einfo.getMInfo();
     for(list<char *>::iterator it = modinfo->begin(); it != modinfo->end(); ++it)
     {
-        char *vIndex = strstr(*it,"5.15.0-126-generic");
-        if(vIndex)
+        char *vIndex = strstr(*it,"vermagic=");
+        if(!vIndex) continue;
+
+        vIndex+=strlen("vermagic=");
+        string curSysVer = m_minfo.getVermagic();
+        if(strlen(vIndex) >= curSysVer.length())
         {
-            strncpy(vIndex,"5.15.0-130-generic",strlen("5.15.0-130-generic"));
-            printf("modify ver str magic to %s\n",*it);
+            strncpy(vIndex,curSysVer.c_str(),strlen(vIndex));
+            printf("modify ver str magic to %s\n",vIndex);
         }
+        else
+        {
+            printf("Error: vIndex = %s curSysVer = %s, len(vIndex) < len(curSysVer)!",
+                   vIndex,curSysVer.c_str());
+            ret = false;
+        }
+        break;
     }
-    return true;
+    return ret;
 }

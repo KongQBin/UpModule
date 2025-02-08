@@ -14,11 +14,19 @@ public:
     ExistingModInfo();
     ~ExistingModInfo();
     void printKMods();
+    string getVermagic();
     unsigned long findSym(string symname);
 private:
+    // 查询系统中正在使用的内核模块
     void queryKMods();
+    // 解析查询到的内核模块的符号信息
     void initAllSymbolVerInfo();
+    // 存放的是<内核符号名称,内核符号CRC>
     map<string, unsigned long> m_va_infos;
+    // 存放的是<内核模块名称,内核模块路径>
     multimap<string, string> m_kmods;
+    // 利用uname函数获取出的系统信息
     uname_t m_system_info;
+    // 存放的是内核版本魔术
+    string m_vermagic;
 };

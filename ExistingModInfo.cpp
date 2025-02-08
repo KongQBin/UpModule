@@ -32,6 +32,11 @@ void ExistingModInfo::printKMods()
     return;
 }
 
+string ExistingModInfo::getVermagic()
+{
+    return m_vermagic;
+}
+
 unsigned long ExistingModInfo::findSym(string symname)
 {
     unsigned long ret = 0;
@@ -83,7 +88,19 @@ void ExistingModInfo::initAllSymbolVerInfo()
 {
     for(auto it = m_kmods.begin(); it != m_kmods.end(); ++it)
     {
-        map<string, unsigned long> tmp(move(ElfSymInfos(it->second,false,false).getSymVerInfo()));
+        ElfSymInfos infos(it->second,false,false);
+        // 获取版本魔术
+        string newVermagic = infos.getVermagic();
+        if(m_vermagic.empty())
+            m_vermagic = newVermagic;
+        else if(m_vermagic != newVermagic)
+        {
+            printf("Warning : old magic = %s new magic = %s\n",
+                   m_vermagic.c_str(),newVermagic.c_str());
+        }
+        else {}
+        // 获取现有驱动的所有符号的CRC信息
+        map<string, unsigned long> tmp(move(infos.getSymVerInfo()));
         for(auto it2 = tmp.begin(); it2 != tmp.end(); ++it2)
         {
             auto index = m_va_infos.find(it2->first);

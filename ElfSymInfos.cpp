@@ -26,6 +26,17 @@ void ElfSymInfos::printSymInfo()
         printf("\tsym name = %-56s crc = %lu\n",it.second->name,it.second->crc);
 }
 
+string ElfSymInfos::getVermagic()
+{
+    const char *vermagic = "vermagic=";
+    for(auto it : m_minfo)
+    {
+        if(!strstr(it,vermagic)) continue;
+        return string(it+strlen(vermagic));
+    }
+    return "";
+}
+
 map<string, unsigned long> ElfSymInfos::getSymVerInfo()
 {
     map<string, unsigned long> ret;

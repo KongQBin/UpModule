@@ -28,6 +28,7 @@
 //    void *test;
 //    void *free;
 //};
+
 //// kernel/module/internal.h:57
 //struct load_info {
 //    const char *name;
@@ -61,6 +62,8 @@
 
 
 
+// argv[1] = 符号表文件
+// argv[2] = 内核模块文件
 int main(int argc, char **argv)
 {
     if(argc < 3) return -1;

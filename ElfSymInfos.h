@@ -23,6 +23,7 @@ public:
     ~ElfSymInfos();
     void printModInfo();
     void printSymInfo();
+    string getVermagic();
     list<char*>* getMInfo();
     map<string, unsigned long> getSymVerInfo();
     map<string,modversion_info*> *getVInfo();
@@ -31,6 +32,7 @@ private:
     bool initSymInfo();
     char* nextString(char *str, unsigned long *secsize);
     ElfPtrs *m_eptrs;
+    string m_vermagic;
     list<char*> m_minfo;
     map<string,modversion_info*> m_vinfo;
 };
