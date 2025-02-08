@@ -8,7 +8,7 @@ public:
     ElfModify(string mod);
     ElfModify(string symver, string mod);
     ~ElfModify();
-    bool motify();
+    bool motify(string vermagic = "");
 private:
     // Module.symvers文件中的信息
     KSymInfos m_kinfo;

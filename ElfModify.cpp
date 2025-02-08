@@ -16,7 +16,7 @@ ElfModify::~ElfModify()
 
 }
 
-bool ElfModify::motify()
+bool ElfModify::motify(string vermagic)
 {
     bool ret = true;
     // 修改符号CRC
@@ -50,7 +50,7 @@ bool ElfModify::motify()
         if(!vIndex) continue;
 
         vIndex+=strlen("vermagic=");
-        string curSysVer = m_minfo.getVermagic();
+        string curSysVer = vermagic.empty() ? m_minfo.getVermagic() : vermagic;
         if(strlen(vIndex) >= curSysVer.length())
         {
             strncpy(vIndex,curSysVer.c_str(),strlen(vIndex));
