@@ -31,6 +31,7 @@ private:
     bool initModInfo();
     bool initSymInfo();
     char* nextString(char *str, unsigned long *secsize);
+    bool m_show;
     ElfPtrs *m_eptrs;
     string m_vermagic;
     list<char*> m_minfo;

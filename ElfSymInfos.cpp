@@ -4,6 +4,12 @@ ElfSymInfos::ElfSymInfos(string file, bool rdwr, bool show)
     m_eptrs = new ElfPtrs(file,rdwr,show);
     initModInfo();
     initSymInfo();
+    m_show = show;
+    if(m_show)
+    {
+        printModInfo();
+        printSymInfo();
+    }
 }
 
 ElfSymInfos::~ElfSymInfos()
@@ -23,7 +29,7 @@ void ElfSymInfos::printSymInfo()
     printf("SymInfo:\n");
     printf("\tnum_versions = %lu\n",m_vinfo.size());
     for(auto it : m_vinfo)
-        printf("\tsym name = %-56s crc = %lu\n",it.second->name,it.second->crc);
+        printf("\tsym name = %-56s crc = 0x%lx\n",it.second->name,it.second->crc);
 }
 
 string ElfSymInfos::getVermagic()

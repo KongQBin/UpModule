@@ -68,6 +68,9 @@ int main(int argc, char **argv)
 {
     if(argc < 3) return -1;
     ElfModify m(argv[1],argv[2]);
-    m.motify();
+    if(argc == 4)
+        m.motify(argv[3]);
+    else
+        m.motify();
     return 0;
 }
