@@ -1,4 +1,4 @@
-# UpModule
+# UpModule [![Hits](https://hits.sh/github.com/KongQBin/UpModule.svg?label=%E7%82%B9%E5%87%BB%E9%87%8F&color=007ec6)](https://hits.sh/github.com/KongQBin/UpModule/)
 ## 项目起因
 - 为了应对内核小版本更新而不需要重新编译驱动
 ## 成功与否
